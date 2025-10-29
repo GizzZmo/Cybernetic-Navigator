@@ -1,0 +1,5 @@
+{
+  "name": "Cyberpunk AI Browser",
+  "description": "A simulation of a Chromium-based AI browser with a cyberpunk aesthetic, featuring AI-powered search, summarization, and theme generation.",
+  "requestFramePermissions": []
+}
