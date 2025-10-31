@@ -56,15 +56,17 @@ export interface Bookmark {
  * Defines the available panel types in the application.
  * Each type corresponds to a different functional panel in the sidebar.
  * 
- * @typedef {('SEARCH' | 'SUMMARIZE' | 'THEME' | 'HELP' | 'VIEWPORT' | 'SETTINGS' | 'BOOKMARKS')} PanelType
+ * - `SEARCH`: AI-powered search and command panel
+ * - `SUMMARIZE`: Text summarization panel
+ * - `THEME`: AI theme generator panel
+ * - `HELP`: Help and information panel
+ * - `VIEWPORT`: Browser viewport (not directly selectable)
+ * - `SETTINGS`: Application settings and API configuration
+ * - `BOOKMARKS`: Bookmark management panel
  * 
- * @description
- * - SEARCH: AI-powered search and command panel
- * - SUMMARIZE: Text summarization panel
- * - THEME: AI theme generator panel
- * - HELP: Help and information panel
- * - VIEWPORT: Browser viewport (not directly selectable)
- * - SETTINGS: Application settings and API configuration
- * - BOOKMARKS: Bookmark management panel
+ * @example
+ * ```typescript
+ * const activePanel: PanelType = 'SEARCH';
+ * ```
  */
 export type PanelType = 'SEARCH' | 'SUMMARIZE' | 'THEME' | 'HELP' | 'VIEWPORT' | 'SETTINGS' | 'BOOKMARKS';
