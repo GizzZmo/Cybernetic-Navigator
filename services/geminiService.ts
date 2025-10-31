@@ -1,12 +1,32 @@
+/**
+ * @fileoverview Google Gemini AI integration service for Cybernetic Navigator.
+ * Provides AI-powered search, text summarization, and theme generation capabilities.
+ * 
+ * @module geminiService
+ */
 
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import type { Theme } from '../types';
 
-// This instance is a fallback for when no session key is provided,
-// or when running in a secure environment where process.env.API_KEY is set.
+/**
+ * Environment API key from .env.local file.
+ * This is a fallback for when no session key is provided.
+ */
 const API_KEY_ENV = process.env.API_KEY;
+
+/**
+ * Fallback AI client instance using environment variable API key.
+ * Only initialized if API_KEY is set in environment.
+ */
 const ai_env = API_KEY_ENV ? new GoogleGenAI({ apiKey: API_KEY_ENV }) : null;
 
+/**
+ * Gets an AI client instance with the appropriate API key.
+ * Prioritizes session API key over environment variable.
+ * 
+ * @param sessionApiKey - Optional API key from user settings
+ * @returns GoogleGenAI instance or null if no API key is available
+ */
 const getAiClient = (sessionApiKey?: string): GoogleGenAI | null => {
   if (sessionApiKey) {
     try {
@@ -19,9 +39,26 @@ const getAiClient = (sessionApiKey?: string): GoogleGenAI | null => {
   return ai_env;
 };
 
-
+/**
+ * The Gemini AI model to use for all requests.
+ * @constant
+ */
 const model = 'gemini-2.5-flash';
 
+/**
+ * Performs AI-powered smart search on a user query.
+ * Responds with contextual, cyberpunk-themed answers.
+ * 
+ * @param prompt - The user's search query or command
+ * @param sessionApiKey - Optional API key from user settings
+ * @returns Promise resolving to AI-generated response text or error message
+ * 
+ * @example
+ * ```typescript
+ * const result = await smartSearch("What is quantum computing?");
+ * console.log(result); // AI explanation of quantum computing
+ * ```
+ */
 export const smartSearch = async (prompt: string, sessionApiKey?: string): Promise<string> => {
   const ai = getAiClient(sessionApiKey);
   if (!ai) return "Error: API Key not configured. Please set it in the Settings panel or via host environment variables.";
@@ -38,6 +75,21 @@ export const smartSearch = async (prompt: string, sessionApiKey?: string): Promi
   }
 };
 
+/**
+ * Summarizes long-form text into concise bullet points.
+ * Optimized for cyberpunk interface display with clear, actionable summaries.
+ * 
+ * @param text - The text content to summarize
+ * @param sessionApiKey - Optional API key from user settings
+ * @returns Promise resolving to bulleted summary or error message
+ * 
+ * @example
+ * ```typescript
+ * const longArticle = "Lorem ipsum dolor sit amet...";
+ * const summary = await summarizeText(longArticle);
+ * console.log(summary); // • Key point 1\n• Key point 2\n• Key point 3
+ * ```
+ */
 export const summarizeText = async (text: string, sessionApiKey?: string): Promise<string> => {
   const ai = getAiClient(sessionApiKey);
   if (!ai) return "Error: API Key not configured. Please set it in the Settings panel or via host environment variables.";
@@ -58,6 +110,11 @@ export const summarizeText = async (text: string, sessionApiKey?: string): Promi
   }
 };
 
+/**
+ * JSON schema definition for AI-generated themes.
+ * Ensures consistent structure and validation of theme objects.
+ * @constant
+ */
 const themeSchema = {
   type: Type.OBJECT,
   properties: {
@@ -69,7 +126,23 @@ const themeSchema = {
   required: ["primaryColor", "accentColor", "textColor", "backgroundColor"]
 };
 
-
+/**
+ * Generates a custom cyberpunk theme based on a text prompt.
+ * Uses AI to create cohesive color schemes matching the description.
+ * 
+ * @param prompt - Description of desired theme (e.g., "neon green matrix style")
+ * @param sessionApiKey - Optional API key from user settings
+ * @returns Promise resolving to Theme object or null on failure
+ * 
+ * @example
+ * ```typescript
+ * const theme = await generateTheme("deep ocean with electric blue");
+ * if (theme) {
+ *   console.log(theme.primaryColor); // #00a8e8
+ *   console.log(theme.accentColor);  // #00f3ff
+ * }
+ * ```
+ */
 export const generateTheme = async (prompt: string, sessionApiKey?: string): Promise<Theme | null> => {
   const ai = getAiClient(sessionApiKey);
   if (!ai) {
