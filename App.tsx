@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Main application component for Cybernetic Navigator.
+ * Manages global state, theme application, and panel navigation.
+ * 
+ * @module App
+ */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import StatusBar from './components/StatusBar';
@@ -5,6 +12,13 @@ import { AddressBarPanel, SummarizerPanel, ThemeGeneratorPanel, HelpPanel, Viewp
 import { CyberButton } from './components/common/CyberElements';
 import type { Theme, PanelType, Bookmark } from './types';
 
+/**
+ * Root application component.
+ * Manages theme, navigation, bookmarks, history, and resizable panels.
+ * 
+ * @component
+ * @returns {React.ReactElement} The rendered application
+ */
 const App: React.FC = () => {
   const [theme, setTheme] = useState<Theme>({
     primaryColor: '#03d8f3',
@@ -84,6 +98,12 @@ const App: React.FC = () => {
 
   }, [theme]);
   
+  /**
+   * Handles URL changes in the viewport.
+   * Updates viewport URL and adds to browsing history.
+   * 
+   * @param {string} newUrl - The new URL to navigate to
+   */
   const handleUrlChange = useCallback((newUrl: string) => {
     setViewportUrl(newUrl);
 
@@ -96,6 +116,12 @@ const App: React.FC = () => {
     });
   }, []);
 
+  /**
+   * Handles adding or removing bookmarks.
+   * Toggles bookmark status for the given URL.
+   * 
+   * @param {string} url - The URL to bookmark or unbookmark
+   */
   const handleAddBookmark = useCallback((url: string) => {
     if (!url || url.trim() === '') return;
     
@@ -111,6 +137,11 @@ const App: React.FC = () => {
     }
   }, [bookmarks]);
 
+  /**
+   * Handles deletion of a bookmark by ID.
+   * 
+   * @param {string} id - The unique identifier of the bookmark to delete
+   */
   const handleDeleteBookmark = useCallback((id: string) => {
     setBookmarks(prev => prev.filter(b => b.id !== id));
   }, []);
@@ -137,10 +168,21 @@ const App: React.FC = () => {
     document.removeEventListener('mouseup', handleMouseUp);
   }, [handleMouseMove]);
 
+  /**
+   * Handles theme generation from AI panel.
+   * Updates the application theme with new colors.
+   * 
+   * @param {Theme} newTheme - The newly generated theme configuration
+   */
   const handleThemeGenerated = useCallback((newTheme: Theme) => {
     setTheme(newTheme);
   }, []);
   
+  /**
+   * Handles navigation to a URL from bookmarks or history.
+   * 
+   * @param {string} url - The URL to navigate to
+   */
   const handleNavigate = useCallback((url: string) => {
     handleUrlChange(url);
   }, [handleUrlChange]);
